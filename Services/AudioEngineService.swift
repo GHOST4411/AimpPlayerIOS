@@ -141,7 +141,7 @@ final class AudioEngineService: ObservableObject {
     private func playDolbyAtmosTrack(track: AudioTrack) {
         let playerItem = AVPlayerItem(url: track.url)
         // Permitir espacialización multicanal y objetos Atmos con seguimiento de cabeza
-        playerItem.audioSpatializationAllowed = true
+        playerItem.isAudioSpatializationAllowed = true
         
         let player = AVPlayer(playerItem: playerItem)
         self.avPlayer = player
@@ -354,3 +354,36 @@ final class AudioEngineService: ObservableObject {
         MPNowPlayingInfoCenter.default().nowPlayingInfo = info
     }
 }
+
+/// Presets clásicos de ecualización estilo AIMP
+enum EqPreset: String, CaseIterable, Identifiable {
+    case flat = "Plano"
+    case rock = "Rock"
+    case bassBoost = "Graves ++"
+    case pop = "Pop"
+    case classical = "Clásica"
+    case vocal = "Voz"
+    case techno = "Techno"
+    
+    var id: String { rawValue }
+    
+    var gains: [Float] {
+        switch self {
+        case .flat:
+            return [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        case .rock:
+            return [4.5, 3.0, 1.5, 0, -1.0, -0.5, 1.5, 3.0, 4.0, 4.5]
+        case .bassBoost:
+            return [7.0, 5.5, 3.5, 1.5, 0, 0, 0, 0, 0, 0]
+        case .pop:
+            return [-1.5, 0.5, 2.0, 3.5, 4.0, 3.0, 1.5, 0.5, -0.5, -1.0]
+        case .classical:
+            return [4.0, 3.0, 2.5, 2.0, -1.0, -1.0, 0, 2.0, 3.0, 3.5]
+        case .vocal:
+            return [-2.0, -2.0, -1.0, 1.5, 3.5, 3.5, 2.0, 0.5, -0.5, -1.5]
+        case .techno:
+            return [5.5, 4.5, 2.0, 0, -1.5, 0, 1.5, 3.5, 4.5, 5.0]
+        }
+    }
+}
+
