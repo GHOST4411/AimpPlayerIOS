@@ -1,0 +1,34 @@
+name: AimpPlayerIOS
+options:
+  bundleIdPrefix: com.personal
+  deploymentTarget:
+    iOS: "16.0"
+
+targets:
+  AimpPlayerIOS:
+    type: application
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - path: AimpPlayerApp.swift
+      - path: Models
+      - path: Services
+      - path: Views
+    info:
+      path: Info.plist
+      properties:
+        CFBundleDisplayName: "AIMP Player"
+        CFBundleIdentifier: "com.personal.AimpPlayerIOS"
+        CFBundleShortVersionString: "1.0"
+        CFBundleVersion: "1"
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.personal.AimpPlayerIOS
+        SWIFT_VERSION: "5.0"
+        ENABLE_BITCODE: NO
+        CODE_SIGN_IDENTITY: ""
+        CODE_SIGNING_REQUIRED: NO
+        CODE_SIGNING_ALLOWED: NO
