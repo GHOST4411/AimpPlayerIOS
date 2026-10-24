@@ -1,0 +1,44 @@
+name: Build AIMP iOS (.ipa)
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-ipa:
+    runs-on: macos-14
+    steps:
+      - name: Checkout Código
+        uses: actions/checkout@v4
+
+      - name: Instalar XcodeGen
+        run: brew install xcodegen
+
+      - name: Generar Proyecto Xcode
+        run: xcodegen generate
+
+      - name: Compilar App para iOS (Release)
+        run: |
+          xcodebuild clean build \
+            -project AimpPlayerIOS.xcodeproj \
+            -scheme AimpPlayerIOS \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath build \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Empaquetar archivo .IPA
+        run: |
+          mkdir -p Payload
+          cp -r build/Build/Products/Release-iphoneos/AimpPlayerIOS.app Payload/
+          zip -r AimpPlayerIOS.ipa Payload
+
+      - name: Subir instalador .IPA listo para descargar
+        uses: actions/upload-artifact@v4
+        with:
+          name: AimpPlayerIOS-IPA
+          path: AimpPlayerIOS.ipa
+          retention-days: 14
